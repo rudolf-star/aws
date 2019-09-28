@@ -72,12 +72,12 @@ def predict_fn(input_data, model):
     
     rew = review_to_words(input_data)
         
-    print(rew)
+    #print(rew)
 
     data_X = convert_and_pad(model.word_dict, rew)
-    print(data_X)
-    print(data_X[0])
-    print(data_X[1])
+    #print(data_X)
+    #print(data_X[0])
+    #print(data_X[1])
     
     data_len = data_X[0]    
         
@@ -95,9 +95,21 @@ def predict_fn(input_data, model):
     # TODO: Compute the result of applying the model to the input data. The variable `result` should
     #       be a numpy array which contains a single integer which is either 1 or 0
 
-    print("going to obtain result")
-    result = model(data)
-    print("result obtained")
-    print(result)
-    print("going to return result")
+    #result = model(data)
+    #result = int(np.round(result.detach().cpu().numpy()))
+    
+    with torch.no_grad():
+        output = model.forward(data)
+
+        # https://knowledge.udacity.com/questions/23616
+        #output = output.to('cpu')
+        result = int(np.round(output.cpu().numpy()))
+        
+    #result = model(data)
+    #print("first output")
+    #print(result)
+    #result = np.round(result.detach())
+    #print("second output")
+    #
+    #print(result)    
     return result
